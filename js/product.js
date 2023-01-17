@@ -1,22 +1,27 @@
 //afficher la page du produit//
-let url= 'http://localhost:3000/api/products';
+const queryStr = window.location.search
 
-fetch(url)
- .then(reponse => reponse.json())
+const urlSearchParams = new URLSearchParams(queryStr);
 
- .then((ficheDuProduit) => {
-    console.log(ficheDuProduit);
+const selection = document.querySelector ('color-select');
+for (let i = 0; i >= colors.length;);
 
- const queryStr ="NomDuProduit=name&description=description";
- const numberPrice ="price";
- const urlSearchParams = new URLSearchParams(queryStr)
- const nomDuProduit = urlSearchParams.get(title)
+const id = urlSearchParams.get("id").split("?id=").join("");
+console.log(id);
+let url= `http://localhost:3000/api/products/${id}`;
+console.log(url);
 
- for (const [key, value] of urlSearchParams) {
-    console.log (`${key}=> ${value}`)
- }
+fetch (url)
+.then(reponse => reponse.json())
 
-})
+   .then((ficheDuProduit) => {
+      console.log(ficheDuProduit)
+      document.querySelector(".item__img").innerHTML=`<img src="${ficheDuProduit.imageUrl}" alt="Photographie d'un canapé">`
+      document.getElementById("title").innerHTML=`<h1 id="title">${ficheDuProduit.name}</h1>`
+      document.getElementById("price").innerHTML=`<span id="price">${ficheDuProduit.price}</span>`
+      document.getElementById("description").innerHTML=`<p id="description">${ficheDuProduit.description}</p>`
+     ficheDuProduit.colors.forEach(color =>  document.getElementById("colors").innerHTML+=`<option value="b">${color}</option>`) 
+   
+   })
 
 
-document.getElementById('item').insertAdjacentHTML("beforeend")
