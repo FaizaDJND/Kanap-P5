@@ -1,5 +1,4 @@
 //Afficher les produits sur la page d'accueil//
-
 let url= 'http://localhost:3000/api/products';
 
 fetch(url)

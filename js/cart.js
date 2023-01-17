@@ -8,6 +8,8 @@ fetch (url)
 
 }) 
 
+if(localStorage.getItem("color") != null)
+${localStorage.getItem ("color")}
 
 /*stockage des informations dans le localstorage
 window.localStorage.setItem

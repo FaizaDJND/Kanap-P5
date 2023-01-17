@@ -20,8 +20,14 @@ fetch (url)
       document.getElementById("title").innerHTML=`<h1 id="title">${ficheDuProduit.name}</h1>`
       document.getElementById("price").innerHTML=`<span id="price">${ficheDuProduit.price}</span>`
       document.getElementById("description").innerHTML=`<p id="description">${ficheDuProduit.description}</p>`
-     ficheDuProduit.colors.forEach(color =>  document.getElementById("colors").innerHTML+=`<option value="b">${color}</option>`) 
-   
+     ficheDuProduit.colors.forEach(color =>  document.getElementById("colors").innerHTML+=`<option value="${color}"</option>`);
+    
    })
+  
+    /*Stockage locale pour le panier*/
+    addToCart.onclick = () =>{
+      localStorage.setItem ("color", colors.value);
+      localStorage.setItem ("quantite", quantity.value);
+   }
 
 
