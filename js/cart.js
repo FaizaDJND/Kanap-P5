@@ -6,10 +6,22 @@ fetch (url)
 {
     console.log(listeDesProduits);
 
-}) 
+})
 
-if(localStorage.getItem("color") != null)
-${localStorage.getItem ("color")}
+/*pour récupérer le panier sauvegarder dans le localstorage*/ 
+function getCart () {
+    let cart = localStorage.getItem("cart");
+    cart = {cart__items}
+
+  if(cart == null){
+        return [];
+  }
+  else {return json.parse(localStorage.getItem("cart"));
+
+  }}
+
+/*
+${localStorage.getItem ("color")}*/
 
 /*stockage des informations dans le localstorage
 window.localStorage.setItem
