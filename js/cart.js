@@ -9,29 +9,3 @@ fetch (url)
 })
 
 /*pour récupérer le panier sauvegarder dans le localstorage*/ 
-function getCart () {
-    let cart = localStorage.getItem("cart");
-    
-
-  if(cart == null){
-        return [];
-  }
-  else {return JSON.parse(localStorage.getItem("cart"));
-
-  }}
-
-/*
-${localStorage.getItem ("color")}*/
-
-/*stockage des informations dans le localstorage
-window.localStorage.setItem
-
-
-.then ((data) => {
-    document.getElementById ("cart__items").innerHTML +=
-    <article class="cart__item" data-id="{product-ID}" data-color="{product-color}"></article>;
-
-})
-panier.forEach(choixDuproduit => 
-   
-    const panier = (localStorage.getItem("panier"))*/
