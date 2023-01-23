@@ -1,13 +1,14 @@
 //Afficher les produits sur la page d'accueil//
+function products(){
 let url= 'http://localhost:3000/api/products';
 
 fetch(url)
- .then(reponse => reponse.json())
+ .then(response => response.json())
 
- .then((produits) => {
-console.log(produits);
+ .then((products) => {
+console.log(products);
 
-   for(let data of produits) {     
+   for(let data of products) {     
         // displayProducts();
        let display = `` 
        display += `<a href="./product.html?id=${data._id}">
@@ -23,3 +24,6 @@ console.log(produits);
  
    }
 })
+}
+products();
+/*Fin affichage des produits sur la page d'accueil*/

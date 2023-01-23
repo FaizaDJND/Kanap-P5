@@ -11,12 +11,12 @@ fetch (url)
 /*pour récupérer le panier sauvegarder dans le localstorage*/ 
 function getCart () {
     let cart = localStorage.getItem("cart");
-    cart = {cart__items}
+    
 
   if(cart == null){
         return [];
   }
-  else {return json.parse(localStorage.getItem("cart"));
+  else {return JSON.parse(localStorage.getItem("cart"));
 
   }}
 
