@@ -30,59 +30,66 @@ pageProduct();
 /*Fin de l'affichage de la page du produit*/
 
 
-/*LocalStoragePourLePanier*/
-/*Pour activer le bouton ajouter au panier*/
+/*Local Storage Pour Le Panier*/
 
+function addingProductToCart(){
+/*Pour activer le bouton ajouter au panier*/
 const buttonAddToCart = document.getElementById("addToCart");
 
+/*Ecouter le bouton Ajouter au panier pour actualiser le storage local*/
 
-/*Variables à utiliser*/
 addToCart.addEventListener("click"), () =>{
-   let dataCart = {
-   kanapId: kanapId,   
-   nameOfKanap: title,   
+
+   let dataCart = [];
+   let productData = {
+   kanapId: id,   
+   nameOfKanap: cardOfProduct.title,   
    color : colors.value,
-   quantity : quantity.value
+   quantity : Number (quantity.value),
+   productImage : cardOfProduct.imageUrl,
+   productAltImage : cardOfProduct.altTxt,
    };
-/* ou let dataCart =[inserer variable à utiliser] pour dire que c'est un tableau*/
-
-   /*Pour ajouter un produit au panier au moment du clique sur le bouton*/
-function addingProductsToCart (){
-
-
-/*renvoie a une erreur si pas d'ajout dans le panier*/
-   if(addingProductsTocart == null){
-      return [];
-      alert ('Le panier est vide');
 }
-
 }
-/*Appel de la fonction addingProductsToCart*/
-addingProductsToCart();
+/*Fin de la fonction addingProductToCart*/
+/*Appel de la fonction addingProductToCart*/
+addingProductToCart();
+/*Fin de l'appel de la fonction addingProductToCart*/
 
 
 /*Fonction pour stocker les données en local*/
+function saveCart (){
+   dataCart.push(productData);
+   localStorage.setItem("productData", JSON.stringify());
+   }
+   /*Appel de la fonction saveCart*/
+   saveCart();
+   /*Fin de l'appel de la fonction saveCart*/
 
-function saveCart (savingActualCart){
+   /*Pour ajouter un produit au panier au moment du clique sur le bouton*/
+/*
+function addingProductsToCart (){}
+   
+/*Appel de la fonction addingProductsToCart
+addingProductsToCart();*/
 
-}
-localStorage.setItem("savingCart", JSON.stringify(savingActualCart));
-}
-/*Appel de la fonction saveCart*/
-saveCart();
 
 /*Pour Récupérer Le Panier*/
-function collectCart (collectActualCart){
-   let collectingCart = JSON.parse(localStorage.getItem("collectActualCart"));
-/*Si le panier est vide, renvoie vers un tableau vide*/
-   if(cart == null){
-      return [];
-   }
-/*Autrement ça récupérer ce qui est stocké dans le stockage local*/
-else {return JSON.parse(localStorage.getItem("collectActualCart"));
+function collectCart (){
+   let collectingCart = JSON.parse(localStorage.getItem("productsInCart"));
 
+/*Si on ajoute un canapé dans le panier*/
+if(productStoreInLocalStorage){
+   addProductIntoExitingCart(productStoreInLocalStorage,productData);
+}
+/*Mais si le panier est vide*/
+else{
+   emptyNewCart(productStoreInLocalStorage, productData);
 }
 }
+  
+/*Autrement ça récupérer ce qui est stocké dans le stockage local*/
+
 /*Fin du addEventListener*/
    
 
