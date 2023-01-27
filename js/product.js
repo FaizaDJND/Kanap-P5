@@ -38,18 +38,19 @@ const buttonAddToCart = document.getElementById("addToCart");
 
 /*Ecouter le bouton Ajouter au panier pour actualiser le storage local*/
 
-addToCart.addEventListener("click"), () =>{
+addToCart.addEventListener("click", () =>{
 
    let dataCart = [];
    let productData = {
    kanapId: id,   
-   nameOfKanap: cardOfProduct.title,   
+   nameOfKanap: product.title,   
    color : colors.value,
    quantity : Number (quantity.value),
-   productImage : cardOfProduct.imageUrl,
-   productAltImage : cardOfProduct.altTxt,
+   productImage : product.imageUrl,
+   productAltImage : product.altTxt,
    };
-}
+})
+dataCart.push(productData);
 }
 /*Fin de la fonction addingProductToCart*/
 /*Appel de la fonction addingProductToCart*/
@@ -57,10 +58,9 @@ addingProductToCart();
 /*Fin de l'appel de la fonction addingProductToCart*/
 
 
-/*Fonction pour stocker les données en local*/
+/*Fonction pour sauvegarder le panier*/
 function saveCart (){
-   dataCart.push(productData);
-   localStorage.setItem("productData", JSON.stringify());
+   localStorage.setItem("product", JSON.stringify());
    }
    /*Appel de la fonction saveCart*/
    saveCart();
