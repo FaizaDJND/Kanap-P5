@@ -1,10 +1,10 @@
 /*Afficher la page du produit*/
-function pageProduct (){
-
 const queryStr = window.location.search
 const urlSearchParams = new URLSearchParams(queryStr);
 const selection = document.querySelector ('color-select');
 const id = urlSearchParams.get("id").split("?id=").join("");
+
+function pageProduct (){
 /*Récupère l'ID de chaque produit présent dans l'URL*/
 console.log(id);
 
@@ -37,34 +37,46 @@ function addingProductToCart(){
 const buttonAddToCart = document.getElementById("addToCart");
 
 /*Ecouter le bouton Ajouter au panier pour actualiser le storage local*/
-
 addToCart.addEventListener("click", () =>{
 
-   let dataCart = [];
+   let dataCart = collectCart()||[];/*Si le panier est vide renvoie à un tableau vide*/
    let productData = {
-   kanapId: id,   
-   nameOfKanap: product.title,   
+   kanapId: id,     
    color : colors.value,
    quantity : Number (quantity.value),
-   productImage : product.imageUrl,
-   productAltImage : product.altTxt,
    };
-})
-dataCart.push(productData);
-}
+
+let productExitingInLocalStorage = JSON.parse (localStorage.getItem("product"));
+
+ if (productExitingInLocalStorage) {
+   addProductOnExistingCart(productExitingInLocalStorage, productData);
+//incrémenter la quantité d'un canapé qui existe déjà dans le panier//
+   
+ } else {
+   dataCart.push(productData);
+};
+
+saveCart(dataCart);
+})}
 /*Fin de la fonction addingProductToCart*/
 /*Appel de la fonction addingProductToCart*/
 addingProductToCart();
 /*Fin de l'appel de la fonction addingProductToCart*/
 
-
 /*Fonction pour sauvegarder le panier*/
-function saveCart (){
-   localStorage.setItem("product", JSON.stringify());
+function saveCart (dataCart){
+   localStorage.setItem("product", JSON.stringify(dataCart));
    }
    /*Appel de la fonction saveCart*/
-   saveCart();
+ 
    /*Fin de l'appel de la fonction saveCart*/
+
+/*Fonction si le produit existe déjç dans le panier
+function addProductOnExistingCart (productExitingInLocalStorage, productData){
+   const findproduct = productExitingInLocalStorage.find
+}*/
+
+
 
    /*Pour ajouter un produit au panier au moment du clique sur le bouton*/
 /*
@@ -76,19 +88,11 @@ addingProductsToCart();*/
 
 /*Pour Récupérer Le Panier*/
 function collectCart (){
-   let collectingCart = JSON.parse(localStorage.getItem("productsInCart"));
+   let collectingCart = JSON.parse(localStorage.getItem("product"))
+   return collectingCart
+}
 
-/*Si on ajoute un canapé dans le panier*/
-if(productStoreInLocalStorage){
-   addProductIntoExitingCart(productStoreInLocalStorage,productData);
-}
-/*Mais si le panier est vide*/
-else{
-   emptyNewCart(productStoreInLocalStorage, productData);
-}
-}
   
-/*Autrement ça récupérer ce qui est stocké dans le stockage local*/
 
 /*Fin du addEventListener*/
    
