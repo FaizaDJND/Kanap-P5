@@ -1,19 +1,20 @@
-/*Afficher la page du produit*/
+/*Variables constantes pour chercher le produit avec son id*/
 const queryStr = window.location.search
 const urlSearchParams = new URLSearchParams(queryStr);
 const selection = document.querySelector ('color-select');
-const id = urlSearchParams.get("id").split("?id=").join("");
+const id = urlSearchParams.get("id");
 
+/*Afficher la page du produit*/
 function pageProduct (){
 /*Récupère l'ID de chaque produit présent dans l'URL*/
 console.log(id);
 
-let url= `http://localhost:3000/api/products/${id}`; /*fetch uniquement la partie qu'on veut retenir avec l'ID du canapé concerné*/ 
+let url= `http://localhost:3000/api/products/${id}`;
 console.log(url);
-
+/*fetch uniquement la partie qu'on veut retenir avec l'ID du canapé concerné*/ 
 fetch (url)
 .then(response => response.json())
-
+/*Afficher le produit dans le DOM*/
    .then((cardOfProduct) => {
       console.log(cardOfProduct)
       document.querySelector(".item__img").innerHTML=`<img src="${cardOfProduct.imageUrl}" alt="Photographie d'un canapé">`
@@ -33,7 +34,7 @@ pageProduct();
 /*Local Storage Pour Le Panier*/
 
 function addingProductToCart(){
-/*Pour activer le bouton ajouter au panier*/
+/*Variable constante pour activer le bouton ajouter au panier*/
 const buttonAddToCart = document.getElementById("addToCart");
 
 /*Ecouter le bouton Ajouter au panier pour actualiser le storage local*/
@@ -47,18 +48,20 @@ addToCart.addEventListener("click", () =>{
    };
 
 let productExitingInLocalStorage = JSON.parse (localStorage.getItem("product"));
-
+/*Si on ajoute un produit au panier*/
  if (productExitingInLocalStorage) {
-   addProductOnExistingCart(productExitingInLocalStorage, productData);
-//incrémenter la quantité d'un canapé qui existe déjà dans le panier//
+   addProductOnExistingCart(productExitingInLocalStorage, productData);  
+/*incrémenter la quantité d'un canapé qui existe déjà dans le panier*/
    
  } else {
    dataCart.push(productData);
 };
-
+  /*Appel de la fonction saveCart*/
 saveCart(dataCart);
-})}
-/*Fin de la fonction addingProductToCart*/
+/*Fin de l'appel de la fonction saveCart*/
+})
+
+}
 /*Appel de la fonction addingProductToCart*/
 addingProductToCart();
 /*Fin de l'appel de la fonction addingProductToCart*/
@@ -67,24 +70,25 @@ addingProductToCart();
 function saveCart (dataCart){
    localStorage.setItem("product", JSON.stringify(dataCart));
    }
-   /*Appel de la fonction saveCart*/
- 
-   /*Fin de l'appel de la fonction saveCart*/
 
-/*Fonction si le produit existe déjç dans le panier
+
+/*Fonction si le produit existe déjà dans le panier*/
+/*Note à moi-même, vérifier cela avec mon mentor*/
 function addProductOnExistingCart (productExitingInLocalStorage, productData){
-   const findproduct = productExitingInLocalStorage.find
-}*/
+   const seachProductInLocalStorage  = productExitingInLocalStorage.find (saveCart);
+      if (seachProductInLocalStorage){
+         let addSameProductQuantity =
+         parsInt(productData(quantity)) + ParsInt(seachProductInLocalStorage.productData(quantity))
+         searchProductInLocalStorage.productData(quantity)= addSameProductQuantity;
+         localStorage.setItem("product", JSON.stringify(dataCart))
+      }
 
+       else {
+         productExitingInLocalStorage.push(productData);
+         localStorage.setItem("product", JSON.stringify(productExitingInLocalStorage));
 
-
-   /*Pour ajouter un produit au panier au moment du clique sur le bouton*/
-/*
-function addingProductsToCart (){}
-   
-/*Appel de la fonction addingProductsToCart
-addingProductsToCart();*/
-
+       }
+      }
 
 /*Pour Récupérer Le Panier*/
 function collectCart (){
