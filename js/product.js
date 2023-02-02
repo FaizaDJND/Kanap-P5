@@ -1,30 +1,30 @@
 /*Variables constantes pour chercher le produit avec son id*/
 const queryStr = window.location.search
 const urlSearchParams = new URLSearchParams(queryStr);
-const selection = document.querySelector ('color-select');
+const selection = document.querySelector('color-select');
 const id = urlSearchParams.get("id");
 
 /*Afficher la page du produit*/
-function pageProduct (){
-/*Récupère l'ID de chaque produit présent dans l'URL*/
-console.log(id);
+function pageProduct() {
+   /*Récupère l'ID de chaque produit présent dans l'URL*/
+   console.log(id);
 
-let url= `http://localhost:3000/api/products/${id}`;
-console.log(url);
-/*fetch uniquement la partie qu'on veut retenir avec l'ID du canapé concerné*/ 
-fetch (url)
-.then(response => response.json())
-/*Afficher le produit dans le DOM*/
-   .then((cardOfProduct) => {
-      console.log(cardOfProduct)
-      document.querySelector(".item__img").innerHTML=`<img src="${cardOfProduct.imageUrl}" alt="Photographie d'un canapé">`
-      document.getElementById("title").innerHTML=`<h1 id="title">${cardOfProduct.name}</h1>`
-      document.getElementById("price").innerHTML=`<span id="price">${cardOfProduct.price}</span>`
-      document.getElementById("description").innerHTML=`<p id="description">${cardOfProduct.description}</p>`
-      document.getElementById("quantity").innerHMTL=`<input type="number" name="itemQuantity" min="1" max="100" value="0" id="quantity">${cardOfProduct.quantity}</input>`
-      cardOfProduct.colors.forEach(color => document.getElementById("colors").innerHTML+=`<option value="${color}">${color}</option>`)
+   let url = `http://localhost:3000/api/products/${id}`;
+   console.log(url);
+   /*fetch uniquement la partie qu'on veut retenir avec l'ID du canapé concerné*/
+   fetch(url)
+      .then(response => response.json())
+      /*Afficher le produit dans le DOM*/
+      .then((cardOfProduct) => {
+         console.log(cardOfProduct)
+         document.querySelector(".item__img").innerHTML = `<img src="${cardOfProduct.imageUrl}" alt="Photographie d'un canapé">`
+         document.getElementById("title").innerHTML = `<h1 id="title">${cardOfProduct.name}</h1>`
+         document.getElementById("price").innerHTML = `<span id="price">${cardOfProduct.price}</span>`
+         document.getElementById("description").innerHTML = `<p id="description">${cardOfProduct.description}</p>`
+         document.getElementById("quantity").innerHMTL = `<input type="number" name="itemQuantity" min="1" max="100" value="0" id="quantity">${cardOfProduct.quantity}</input>`
+         cardOfProduct.colors.forEach(color => document.getElementById("colors").innerHTML += `<option value="${color}">${color}</option>`)
 
-   }) 
+      })
 }
 /*Appel de la fonction pageProduct*/
 pageProduct();
@@ -33,73 +33,71 @@ pageProduct();
 
 /*Local Storage Pour Le Panier*/
 
-function addingProductToCart(){
-/*Variable constante pour activer le bouton ajouter au panier*/
-const buttonAddToCart = document.getElementById("addToCart");
+function addingProductToCart() {
+   /*Variable constante pour activer le bouton ajouter au panier*/
+   const buttonAddToCart = document.getElementById("addToCart");
 
-/*Ecouter le bouton Ajouter au panier pour actualiser le storage local*/
-addToCart.addEventListener("click", () =>{
-
-   let dataCart = collectCart()||[];/*Si le panier est vide renvoie à un tableau vide*/
-   let productData = {
-   kanapId: id,     
-   color : colors.value,
-   quantity : Number (quantity.value),
-   };
-
-let productExitingInLocalStorage = JSON.parse (localStorage.getItem("product"));
-/*Si on ajoute un produit au panier*/
- if (productExitingInLocalStorage) {
-   addProductOnExistingCart(productExitingInLocalStorage, productData);  
-/*incrémenter la quantité d'un canapé qui existe déjà dans le panier*/
+   /*Ecouter le bouton Ajouter au panier pour actualiser le storage local*/
+   addToCart.addEventListener("click", () => {
    
- } else {
-   dataCart.push(productData);
-};
-  /*Appel de la fonction saveCart*/
-saveCart(dataCart);
-/*Fin de l'appel de la fonction saveCart*/
-})
+      let dataCart = collectCart() || [];/*Si le panier est vide renvoie à un tableau vide*/
+      let productData = {
+         kanapId: id,
+         color: colors.value,
+         quantity: Number(quantity.value),
+      };
 
+      /*Si on ajoute un produit au panier*/
+      if (dataCart.length > 0) {
+
+         addProductOnExistingCart(dataCart, productData);
+         /*incrémenter la quantité d'un canapé qui existe déjà dans le panier*/
+
+      } else {
+         dataCart.push(productData);
+      };
+
+      /*Pour limiter la quantité du produit*/
+      if (quantity.value > 0 && quantity.value <= 80 && quantity.value != 0) {
+         alert ('Le produit est bien ajouté au panier');
+      } else {
+         alert ('Veuillez mettre une quantité valide');
+      }
+      /*Appel de la fonction saveCart*/
+      saveCart(dataCart);
+      /*Fin de l'appel de la fonction saveCart*/
+   });
 }
 /*Appel de la fonction addingProductToCart*/
 addingProductToCart();
 /*Fin de l'appel de la fonction addingProductToCart*/
 
 /*Fonction pour sauvegarder le panier*/
-function saveCart (dataCart){
+function saveCart(dataCart) {
    localStorage.setItem("product", JSON.stringify(dataCart));
-   }
-
+}
 
 /*Fonction si le produit existe déjà dans le panier*/
-/*Note à moi-même, vérifier cela avec mon mentor*/
-function addProductOnExistingCart (productExitingInLocalStorage, productData){
-   const seachProductInLocalStorage  = productExitingInLocalStorage.find (saveCart);
-      if (seachProductInLocalStorage){
-         let addSameProductQuantity =
-         parsInt(productData(quantity)) + ParsInt(seachProductInLocalStorage.productData(quantity))
-         searchProductInLocalStorage.productData(quantity)= addSameProductQuantity;
-         localStorage.setItem("product", JSON.stringify(dataCart))
-      }
+function addProductOnExistingCart(productExistingInLocalStorage, productData) {
+   let searchProductInLocalStorage = productExistingInLocalStorage.find(item => item.id === productData.id && item.color === productData.color);
+   if (searchProductInLocalStorage != undefined) {
+      searchProductInLocalStorage.quantity = parseInt(searchProductInLocalStorage.quantity) + parseInt(productData.quantity);
+   }
 
-       else {
-         productExitingInLocalStorage.push(productData);
-         localStorage.setItem("product", JSON.stringify(productExitingInLocalStorage));
+   else {
+      productExistingInLocalStorage.push(productData);
 
-       }
-      }
+   }
+  
+}
 
 /*Pour Récupérer Le Panier*/
-function collectCart (){
+function collectCart() {
    let collectingCart = JSON.parse(localStorage.getItem("product"))
    return collectingCart
 }
 
-  
-
 /*Fin du addEventListener*/
-   
 
 
-  
+
