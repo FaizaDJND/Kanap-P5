@@ -1,11 +1,3 @@
-//Récupération des données depuis le fichier JSON//
-let url= `http://localhost:3000/api/products/`;
-fetch (url)
-.then ((reponse)=> reponse.json())
-.then ((listeDesProduits)=> 
-{
-    console.log(listeDesProduits);
+/*Pour récupérer le panier sauvegarder dans le localstorage*/ 
+let productExistingInLocalStorage = JSON.parse(localStorage.getItem("product"));
 
-})
-
-/*pour récupérer le panier sauvegarder dans le localstorage*/ 
