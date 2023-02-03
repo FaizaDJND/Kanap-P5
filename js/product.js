@@ -47,22 +47,26 @@ function addingProductToCart() {
          quantity: Number(quantity.value),
       };
 
+   
+      /*Pour limiter la quantité du produit*/
+      if (quantity.value > 0 && quantity.value <= 100 && quantity.value != 0) {
+      } else { 
+         alert ("La quantité demandée n'est pas valide. Nos produits sont limités. Merci de sélectionner une quantité entre 1 et 100.");
+         return false
+      }
+
       /*Si on ajoute un produit au panier*/
-      if (dataCart.length > 0) {
+      if (dataCart.length > 0 &&  dataCart.length <= 100) {
+         alert ("Le produit a bien été rajouté dans votre panier")
 
          addProductOnExistingCart(dataCart, productData);
          /*incrémenter la quantité d'un canapé qui existe déjà dans le panier*/
 
       } else {
          dataCart.push(productData);
+         alert ('Le produit a bien été ajouté dans votre panier')
       };
 
-      /*Pour limiter la quantité du produit*/
-      if (quantity.value > 0 && quantity.value <= 80 && quantity.value != 0) {
-         alert ('Le produit est bien ajouté au panier');
-      } else {
-         alert ('Veuillez mettre une quantité valide');
-      }
       /*Appel de la fonction saveCart*/
       saveCart(dataCart);
       /*Fin de l'appel de la fonction saveCart*/
@@ -80,8 +84,10 @@ function saveCart(dataCart) {
 /*Fonction si le produit existe déjà dans le panier*/
 function addProductOnExistingCart(productExistingInLocalStorage, productData) {
    let searchProductInLocalStorage = productExistingInLocalStorage.find(item => item.id === productData.id && item.color === productData.color);
-   if (searchProductInLocalStorage != undefined) {
-      searchProductInLocalStorage.quantity = parseInt(searchProductInLocalStorage.quantity) + parseInt(productData.quantity);
+   if (searchProductInLocalStorage != undefined &&
+      quantity.value > 0 && quantity.value <= 100 && quantity.value != 0)  {
+      searchProductInLocalStorage.quantity = parseInt(searchProductInLocalStorage.quantity) + 
+      parseInt(productData.quantity);
    }
 
    else {
