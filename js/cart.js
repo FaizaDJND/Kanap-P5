@@ -51,20 +51,19 @@ const productFromApi = await productData(product.kanapId);
 }
 /*Appel de la fonction d'affichage des produits sur le panier enregistré dans le localStorage*/
 displayCart();
+totalQuantityCart();
 totalPriceCart();
 /*Fin de l'appel de la fonction d'affichage des produits sur le panier enregistré dans le localStorage*/
 
 /*Fonction pour afficher la quantité total du panier*/
-function totalQuantityCart(){
+async function totalQuantityCart(){
   let totalQuantity = 0;
-  collectingCart.forEach(product =>{
+  for (let product of collectingCart){
     totalQuantity = totalQuantity + (parseInt(product.quantity))
-  })
-
-  const displayTotalQuantity = document.getElementById("totalQuantity");
-  const displayTotalQuantityOnHtml = totalQuantity;
-  
-  displayTotalQuantity.innerHTML = displayTotalQuantityOnHtml;
+    
+  }
+  console.log(totalQuantity);
+ document.getElementById("totalQuantity").textContent = totalQuantity;
 }
 
 /*Fonction pour afficher le prix total du panier*/
