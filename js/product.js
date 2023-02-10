@@ -83,16 +83,16 @@ function saveCart(dataCart) {
 
 /*Fonction si le produit existe déjà dans le panier*/
 function addProductOnExistingCart(productExistingInLocalStorage, productData) {
-   let searchProductInLocalStorage = productExistingInLocalStorage.find(item => item.id === productData.id && item.color === productData.color);
+   let searchProductInLocalStorage = productExistingInLocalStorage.find(item => item.id === productData.id && item.color === productData.color); 
    if (searchProductInLocalStorage != undefined &&
-      quantity.value > 0 && quantity.value <= 100 && quantity.value != 0)  {
+      quantity.value > 0 && quantity.value <= 100 && parseInt(searchProductInLocalStorage.quantity) + 
+      parseInt(productData.quantity) <=100){
       searchProductInLocalStorage.quantity = parseInt(searchProductInLocalStorage.quantity) + 
       parseInt(productData.quantity);
    }
 
    else {
       productExistingInLocalStorage.push(productData);
-
    }
   
 }
