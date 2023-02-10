@@ -45,7 +45,7 @@ const productFromApi = await productData(product.kanapId);
   } else {
     collectingCart =[];
     alert ("Le panier est vide")
-    localStorage.setItem("product", JSON.stringify(collectingCart))
+    
   }
 }
 }
@@ -54,23 +54,39 @@ displayCart();
 totalPriceCart();
 /*Fin de l'appel de la fonction d'affichage des produits sur le panier enregistré dans le localStorage*/
 
-/*Fonction pour afficher le prix total du panier*/
-function totalPriceCart(displayCart) {
-  let total = 0;
-  collectingCart.forEach(product => {
-    total = total + (Number(product.price) * Number(product.quantity))
+/*Fonction pour afficher la quantité total du panier*/
+function totalQuantityCart(){
+  let totalQuantity = 0;
+  collectingCart.forEach(product =>{
+    totalQuantity = totalQuantity + (parseInt(product.quantity))
   })
-  const displayTotalPrice = document.getElementById("totalPrice");
-  const displayTotalPriceOnHtml = `${total}`;
 
-  displayTotalPrice.innerHTML= displayTotalPriceOnHtml;
+  const displayTotalQuantity = document.getElementById("totalQuantity");
+  const displayTotalQuantityOnHtml = totalQuantity;
+  
+  displayTotalQuantity.innerHTML = displayTotalQuantityOnHtml;
 }
+
+/*Fonction pour afficher le prix total du panier*/
+async function totalPriceCart(displayCart) {
+  let total = 0;
+  for (let product of collectingCart){
+   const productFromApi = await productData(product.kanapId);
+    total = total + (parseInt(productFromApi.price) * parseInt(product.quantity))
+  }
+  console.log (total);
+ document.getElementById("totalPrice").textContent = total;
+}
+
 
 
 
 /*Fonction pour changer la quantité d'un produit*/
 function editQuantity (){
   let itemQuantity = document.querySelectorAll(".itemQuantity");
+  itemQuantity.forEach( item => {})
+
+
 }
 /*Fonction pour supprimer un produit*/
 function deleteProduct () {
