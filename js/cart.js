@@ -49,18 +49,17 @@ const productFromApi = await productData(product.kanapId);
   }
 }
 }
-/*Appel de la fonction d'affichage des produits sur le panier enregistré dans le localStorage*/
+/*Appel des fonctions pour l'affichage des produits stockés dans le localStorage*/
 displayCart();
 totalQuantityCart();
 totalPriceCart();
-/*Fin de l'appel de la fonction d'affichage des produits sur le panier enregistré dans le localStorage*/
+/*Fin de l'appel des fonction pour l'afficahe des produits stockés dans le localStorage*/
 
 /*Fonction pour afficher la quantité total du panier*/
 async function totalQuantityCart(){
   let totalQuantity = 0;
   for (let product of collectingCart){
     totalQuantity = totalQuantity + (parseInt(product.quantity))
-    
   }
   console.log(totalQuantity);
  document.getElementById("totalQuantity").textContent = totalQuantity;
@@ -77,16 +76,25 @@ async function totalPriceCart(displayCart) {
  document.getElementById("totalPrice").textContent = total;
 }
 
-
-
-
 /*Fonction pour changer la quantité d'un produit*/
-function editQuantity (){
+async function editQuantity (displayCart){
+  const quantity = await displayCart;
   let itemQuantity = document.querySelectorAll(".itemQuantity");
-  itemQuantity.forEach( item => {})
 
+  itemQuantity.forEach( item => {
+  let newQuantityProduct= "";
 
+    item.addEventListener("change",(events))
+    {
+
+      console.log(events);
+  }   
+  });
+localStorage.setItem("product", JSON.stringify(collectingCart));
+totalQuantityCart();
+totalPriceCart();
 }
+
 /*Fonction pour supprimer un produit*/
 function deleteProduct () {
   let buttonDelete = document.querySelectorAll(".deleteItem");
