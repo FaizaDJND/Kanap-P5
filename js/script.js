@@ -2,14 +2,13 @@
 function products(){
 let url= 'http://localhost:3000/api/products';
 
+// Fetch de l'API//
 fetch(url)
  .then(response => response.json())
 
  .then((products) => {
-console.log(products);
-
-   for(let data of products) {     
-        // displayProducts();
+ for(let data of products) {     
+        //affichage des données pour les produits//
        let display = `` 
        display += `<a href="./product.html?id=${data._id}">
                        <article>
@@ -25,5 +24,6 @@ console.log(products);
    }
 })
 }
+//appel de la fonction Products//
 products();
-/*Fin affichage des produits sur la page d'accueil*/
+//Fin affichage des produits sur la page d'accueil//
