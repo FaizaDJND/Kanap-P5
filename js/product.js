@@ -15,7 +15,7 @@ function pageProduct() {
       .then((cardOfProduct) => {
          document.querySelector(".item__img").innerHTML = `<img src="${cardOfProduct.imageUrl}" alt="Photographie d'un canapé">`
          document.getElementById("title").textContent = cardOfProduct.name
-         document.getElementById("price").innerHTML = `<span id="price">${cardOfProduct.price}</span>`
+         document.getElementById("price").textContent = cardOfProduct.price
          document.getElementById("description").textContent = cardOfProduct.description
          document.getElementById("quantity").innerHMTL = `<input type="number" name="itemQuantity" min="1" max="100" value="0" id="quantity">${cardOfProduct.quantity}</input>`
          cardOfProduct.colors.forEach(color => document.getElementById("colors").innerHTML += `<option value="${color}">${color}</option>`)

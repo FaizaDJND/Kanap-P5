@@ -1,9 +1,6 @@
 //Pour récupérer le panier sauvegarder dans le localstorage//
 let collectingCart = JSON.parse(localStorage.getItem("product"));
 
-//Constante pour un panier vide//
-const blankCart = document.querySelector("#cart__items");
-
 //Fonction pour récupérer les informations manquantes//
 async function productData(id) {
   let url = `http://localhost:3000/api/products/${id}`;
@@ -11,12 +8,10 @@ async function productData(id) {
   return await data.json(); //Retour vers les données qui sont fetché//
 }
 
-//Fonction pour afficher les produits dans la page panier qui sont stockés dans le localStorage//
+//Fonction pour afficher les produits dans la page panier qui sont stockés dans le localStorage et dans l'API//
 function displayCart(productsData) {
   if (productsData.length > 0) {
     productsData.forEach((product) => {
-      //Appel de la fonction qui cherche les produits sélectionnés dans l'API//
-
       document.getElementById(
         "cart__items"
       ).innerHTML += `<article class="cart__item" data-id="${product.kanapId}" data-color="${product.color}">
@@ -52,7 +47,7 @@ function totalQuantityCart() {
   for (let product of collectingCart) {
     totalQuantity = totalQuantity + parseInt(product.quantity);
   }
-  document.getElementById("totalQuantity").textContent = totalQuantity;
+  document.getElementById("totalQuantity").innerHTML = totalQuantity;
 }
 
 //Fonction pour afficher le prix total du panier//
@@ -61,7 +56,7 @@ function totalPriceCart(productsData) {
   for (let product of productsData) {
     total = total + parseInt(product.price) * parseInt(product.quantity);
   }
-  document.getElementById("totalPrice").textContent = total;
+  document.getElementById("totalPrice").innerHTML = total;
 }
 
 //Fonction pour changer la quantité d'un produit//
@@ -112,8 +107,11 @@ function deleteProduct(productsData) {
       collecting.splice(searchDeletingProduct, 1);
       localStorage.setItem("product", JSON.stringify(collecting));
       alert("Le produit a bien été supprimé du panier");
+      //La page se rafraichie automatiquement avec la suppression de l'objet//
       location.reload();
     });
+
+    //Rappel des fonctions pour la quantité et le prix total mise à jour avec la suppression de l'objet//
     totalQuantityCart();
     totalPriceCart(productsData);
   });
@@ -161,35 +159,35 @@ function valideOrder(firstName, lastName, adress, city, email) {
   let collectOrder = JSON.parse(localStorage.getItem("product"));
   let formOk = true;
   if (!firstNameReg.test(firstName) || firstName === null) {
-    firstNameError.innerHTML = "Veuillez renseigner un prénom valide";
+    firstNameError.textContent = "Veuillez renseigner un prénom valide";
     formOk = false;
   } else {
-    firstNameError.innerHTML = "";
+    firstNameError.textContent = "";
   }
   if (!lastNameReg.test(lastName) || lastName === null) {
-    lastNameError.innerHTML = "Veuillez renseigner un nom de famille valide";
+    lastNameError.textContent = "Veuillez renseigner un nom de famille valide";
     formOk = false
   } else {
-    lastNameError.innerHTML = "";
+    lastNameError.textContent = "";
   }
   if (!adressReg.test(adress) || adress === null) {
-    adressError.innerHTML = "Veuillez renseigner une adresse valide";
+    adressError.textContent = "Veuillez renseigner une adresse valide";
     formOk = false;
   } else {
-    adressError.innerHTML = "";
+    adressError.textContent = "";
   }
   if (!cityReg.test(city) || city === null) {
-    cityError.innerHTML = "Veuillez renseigner une ville valide";
+    cityError.textContent = "Veuillez renseigner une ville valide";
     formOk = false;
   } else {
-    cityError.innerHTML = "";
+    cityError.textContent = "";
   }
   if (!emailReg.test(email) || email === null) {
-    emailError.innerHTML = "Veuillez renseigner une adresse email valide";
+    emailError.textContent = "Veuillez renseigner une adresse email valide";
     formOk = false;
   }
   else {
-    emailError.innerHTML = "";
+    emailError.textContent = "";
   }
   // Si le formulaire est bien renseigné avec des données valides//
   if (formOk) {
@@ -227,14 +225,13 @@ function valideOrder(firstName, lastName, adress, city, email) {
   }
 }
 
-
 //Appel des toutes les  fonctions pour l'affichage des produits stockés dans le localStorage//
 async function main() {
-//création d'un tableau vide qui va contenir les deux données de l'API et du LS//
+  //création d'un tableau vide qui va contenir les deux données de l'API et du LS//
   let productsData = []
-//création d'une boucle de product de ma variable collectingcart//
+  //création d'une boucle de product de ma variable collectingcart//
   for (let product of collectingCart) {
-//récupération de données de l'API //
+    //récupération de données de l'API //
     const productFromApi = await productData(product.kanapId);
     productsData.push({
       //rest des données à récupérer et pushé de l'API et du LS//
