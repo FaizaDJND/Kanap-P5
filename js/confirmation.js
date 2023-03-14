@@ -9,4 +9,4 @@ function confirmationOrder() {
 //appel de la fonction qui confirme la commande//
 confirmationOrder();
 //On vide le localStorage après confirmation de la commande//
-localStorage.clear();
+localStorage.removeItem("product");

@@ -14,9 +14,9 @@ function pageProduct() {
       //Afficher le produit dans le DOM//
       .then((cardOfProduct) => {
          document.querySelector(".item__img").innerHTML = `<img src="${cardOfProduct.imageUrl}" alt="Photographie d'un canapé">`
-         document.getElementById("title").innerHTML = `<h1 id="title">${cardOfProduct.name}</h1>`
+         document.getElementById("title").textContent = cardOfProduct.name
          document.getElementById("price").innerHTML = `<span id="price">${cardOfProduct.price}</span>`
-         document.getElementById("description").innerHTML = `<p id="description">${cardOfProduct.description}</p>`
+         document.getElementById("description").textContent = cardOfProduct.description
          document.getElementById("quantity").innerHMTL = `<input type="number" name="itemQuantity" min="1" max="100" value="0" id="quantity">${cardOfProduct.quantity}</input>`
          cardOfProduct.colors.forEach(color => document.getElementById("colors").innerHTML += `<option value="${color}">${color}</option>`)
 
@@ -30,11 +30,11 @@ pageProduct();
 //------------------------------Local Storage Pour Le Panier--------------------------//
 
 function addingProductToCart() {
-   //Variable constante pour activer le bouton ajouter au panier//
+   //Variable qui stock le pointeur sur le bouton, écoute au clique//
    const buttonAddToCart = document.getElementById("addToCart");
 
    //Ecouter le bouton Ajouter au panier au clique pour actualiser le storage local//
-   addToCart.addEventListener("click", () => {
+  buttonAddToCart.addEventListener("click", () => {
 
       let dataCart = collectCart() || [];/*Si le panier est vide renvoie à un tableau vide*/
       let productData = {

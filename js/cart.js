@@ -12,23 +12,21 @@ async function productData(id) {
 }
 
 //Fonction pour afficher les produits dans la page panier qui sont stockés dans le localStorage//
-async function displayCart() {
-  if (localStorage.getItem("product")) {
-    if (collectingCart.length > 0) {
-      collectingCart.forEach(async (product) => {
-        //Appel de la fonction qui cherche les produits sélectionnés dans l'API//
-        const productFromApi = await productData(product.kanapId);
+function displayCart(productsData) {
+  if (productsData.length > 0) {
+    productsData.forEach((product) => {
+      //Appel de la fonction qui cherche les produits sélectionnés dans l'API//
 
-        document.getElementById(
-          "cart__items"
-        ).innerHTML += `<article class="cart__item" data-id="${product.kanapId}" data-color="${product.color}">
+      document.getElementById(
+        "cart__items"
+      ).innerHTML += `<article class="cart__item" data-id="${product.kanapId}" data-color="${product.color}">
         <div class="cart__item__img">
-          <img src=${productFromApi.imageUrl} alt=${productFromApi.altTxt}>
+          <img src=${product.imageUrl} alt=${product.altTxt}>
         </div><div class="cart__item__content">
           <div class="cart__item__content__description">
-            <h2>Modèle: ${productFromApi.name}</h2>
+            <h2>Modèle: ${product.name}</h2>
             <p>Couleur: ${product.color}</p>
-            <p>Prix: ${productFromApi.price}€</p>
+            <p>Prix: ${product.price}€</p>
           </div>
           <div class="cart__item__content__settings">
             <div class="cart__item__content__settings__quantity">
@@ -41,16 +39,15 @@ async function displayCart() {
           </div>
         </div>
       </article>`;
-      });
-    } else {
-      collectingCart = [];
-      alert("Le panier est vide");
-    }
+    });
+  } else {
+    collectingCart = [];
+    alert("Le panier est vide");
   }
 }
 
 //Fonction pour afficher la quantité total du panier//
-async function totalQuantityCart() {
+function totalQuantityCart() {
   let totalQuantity = 0;
   for (let product of collectingCart) {
     totalQuantity = totalQuantity + parseInt(product.quantity);
@@ -59,22 +56,21 @@ async function totalQuantityCart() {
 }
 
 //Fonction pour afficher le prix total du panier//
-async function totalPriceCart() {
+function totalPriceCart(productsData) {
   let total = 0;
-  for (let product of collectingCart) {
-    const productFromApi = await productData(product.kanapId);
-    total = total + parseInt(productFromApi.price) * parseInt(product.quantity);
+  for (let product of productsData) {
+    total = total + parseInt(product.price) * parseInt(product.quantity);
   }
   document.getElementById("totalPrice").textContent = total;
 }
 
 //Fonction pour changer la quantité d'un produit//
-function editQuantity() {
+function editQuantity(productsData) {
   let itemQuantity = document.querySelectorAll(".itemQuantity");
 
   itemQuantity.forEach((input) => {
     //ecoute de l'évenement pour changer la quantité//
-    input.addEventListener("change", async (evenement) => {
+    input.addEventListener("change", (evenement) => {
       let inputQuantity = evenement.target;
       let inputQuantityClosest = inputQuantity.closest(".cart__item");
       let productId = inputQuantityClosest.dataset.id;
@@ -90,14 +86,14 @@ function editQuantity() {
       product.quantity = Number(inputQuantity.value);
       localStorage.setItem("product", JSON.stringify(cart));
       totalQuantityCart();
-      totalPriceCart();
+      totalPriceCart(productsData);
       location.reload();
     });
   });
 }
 
 //Fonction pour supprimer un produit//
-function deleteProduct() {
+function deleteProduct(productsData) {
   const buttonDelete = document.querySelectorAll(".deleteItem");
   buttonDelete.forEach((item) => {
     item.addEventListener("click", async (evenement) => {
@@ -119,7 +115,7 @@ function deleteProduct() {
       location.reload();
     });
     totalQuantityCart();
-    totalPriceCart();
+    totalPriceCart(productsData);
   });
 }
 
@@ -222,22 +218,31 @@ function valideOrder(firstName, lastName, adress, city, email) {
         "content-type": "application/json",
       },
     });
-    //Réponse de l'API//
-    orderId.then(async (response) => {
-      responseFromApi = await response.json();
-      window.location.href = `confirmation.html?orderId=${responseFromApi.orderId}`;
-    });
+    //Réponse de l'API, retourne la réponse json//
+    orderId
+      .then((response) => response.json())
+      .then((responseFromApi) => {
+        window.location.href = `confirmation.html?orderId=${responseFromApi.orderId}`;
+      });
   }
 }
 
 
 /*Appel des toutes les  fonctions pour l'affichage des produits stockés dans le localStorage*/
 async function main() {
-  await displayCart();
-  await totalQuantityCart();
-  await totalPriceCart();
-  await editQuantity(collectingCart);
-  await deleteProduct(collectingCart);
+  let productsData = []
+  for (let product of collectingCart) {
+    const productFromApi = await productData(product.kanapId);
+    productsData.push({
+      ...productFromApi,
+      ...product,
+    });
+  }
+  displayCart(productsData);
+  totalQuantityCart();
+  totalPriceCart(productsData);
+  editQuantity(productsData);
+  deleteProduct(productsData);
 }
 main();
 /*Fin de l'appel des fonction pour l'afficahe des produits stockés dans le localStorage*/
