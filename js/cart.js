@@ -228,12 +228,16 @@ function valideOrder(firstName, lastName, adress, city, email) {
 }
 
 
-/*Appel des toutes les  fonctions pour l'affichage des produits stockés dans le localStorage*/
+//Appel des toutes les  fonctions pour l'affichage des produits stockés dans le localStorage//
 async function main() {
+//création d'un tableau vide qui va contenir les deux données de l'API et du LS//
   let productsData = []
+//création d'une boucle de product de ma variable collectingcart//
   for (let product of collectingCart) {
+//récupération de données de l'API //
     const productFromApi = await productData(product.kanapId);
     productsData.push({
+      //rest des données à récupérer et pushé de l'API et du LS//
       ...productFromApi,
       ...product,
     });

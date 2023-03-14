@@ -2,10 +2,9 @@
 function products() {
     let url = 'http://localhost:3000/api/products';
 
-    // Fetch de l'API//
+    // Fetch de l'API avec promesse//
     fetch(url)
         .then(response => response.json())
-
         .then((products) => {
             for (let data of products) {
                 //affichage des données pour les produits//
