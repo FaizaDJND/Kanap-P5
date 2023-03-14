@@ -8,13 +8,11 @@ const id = urlSearchParams.get("id");
 function pageProduct() {
    //Récupère l'ID de chaque produit présent dans l'URL//
    let url = `http://localhost:3000/api/products/${id}`;
-   console.log(url);
    //fetch uniquement la partie qu'on veut retenir avec l'ID du canapé concerné//
    fetch(url)
       .then(response => response.json())
       //Afficher le produit dans le DOM//
       .then((cardOfProduct) => {
-         console.log(cardOfProduct)
          document.querySelector(".item__img").innerHTML = `<img src="${cardOfProduct.imageUrl}" alt="Photographie d'un canapé">`
          document.getElementById("title").innerHTML = `<h1 id="title">${cardOfProduct.name}</h1>`
          document.getElementById("price").innerHTML = `<span id="price">${cardOfProduct.price}</span>`
@@ -37,7 +35,7 @@ function addingProductToCart() {
 
    //Ecouter le bouton Ajouter au panier au clique pour actualiser le storage local//
    addToCart.addEventListener("click", () => {
-   
+
       let dataCart = collectCart() || [];/*Si le panier est vide renvoie à un tableau vide*/
       let productData = {
          kanapId: id,
@@ -45,24 +43,24 @@ function addingProductToCart() {
          quantity: Number(quantity.value),
       };
 
-   
+
       //Pour limiter la quantité du produit avec message d'alerte//
       if (quantity.value > 0 && quantity.value <= 100 && quantity.value != 0) {
-      } else { 
-         alert ("La quantité demandée n'est pas valide. Nos produits sont limités. Merci de sélectionner une quantité entre 1 et 100.");
+      } else {
+         alert("La quantité demandée n'est pas valide. Nos produits sont limités. Merci de sélectionner une quantité entre 1 et 100.");
          return false
       }
 
       //Si on ajoute un produit au panier avec message d'alerte//
-      if (dataCart.length > 0 &&  dataCart.length <= 100) {
-         alert ("Le produit a bien été rajouté dans votre panier")
+      if (dataCart.length > 0 && dataCart.length <= 100) {
+         alert("Le produit a bien été rajouté dans votre panier")
 
          addProductOnExistingCart(dataCart, productData);
          //incrémenter la quantité d'un canapé qui existe déjà dans le panier//
 
       } else {
          dataCart.push(productData);
-         alert ('Le produit a bien été ajouté dans votre panier')
+         alert('Le produit a bien été ajouté dans votre panier')
       };
 
       //Appel de la fonction saveCart//
@@ -79,20 +77,20 @@ function saveCart(dataCart) {
    localStorage.setItem("product", JSON.stringify(dataCart));
 }
 
-//Fonction si le produit existe déjà dans le panier//
+//Fonction si le produit existe déjà dans le panier et modifier la quantité//
 function addProductOnExistingCart(productExistingInLocalStorage, productData) {
-   let searchProductInLocalStorage = productExistingInLocalStorage.find(item => item.id === productData.id && item.color === productData.color); 
+   let searchProductInLocalStorage = productExistingInLocalStorage.find(item => item.id === productData.id && item.color === productData.color);
    if (searchProductInLocalStorage != undefined &&
-      quantity.value > 0 && quantity.value <= 100 && parseInt(searchProductInLocalStorage.quantity) + 
-      parseInt(productData.quantity) <=100){
-      searchProductInLocalStorage.quantity = parseInt(searchProductInLocalStorage.quantity) + 
-      parseInt(productData.quantity);
+      quantity.value > 0 && quantity.value <= 100 && parseInt(searchProductInLocalStorage.quantity) +
+      parseInt(productData.quantity) <= 100) {
+      searchProductInLocalStorage.quantity = parseInt(searchProductInLocalStorage.quantity) +
+         parseInt(productData.quantity);
    }
 
    else {
       productExistingInLocalStorage.push(productData);
    }
-  
+
 }
 
 //Pour Récupérer Le Panier//

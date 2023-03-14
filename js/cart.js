@@ -59,7 +59,7 @@ async function totalQuantityCart() {
 }
 
 //Fonction pour afficher le prix total du panier//
-async function totalPriceCart(displayCart) {
+async function totalPriceCart() {
   let total = 0;
   for (let product of collectingCart) {
     const productFromApi = await productData(product.kanapId);
@@ -80,7 +80,7 @@ function editQuantity() {
       let productId = inputQuantityClosest.dataset.id;
       let productColor = inputQuantityClosest.dataset.color;
       let cart = JSON.parse(localStorage.getItem("product"));
-      
+
       let product = cart.find((cartProduct) => {
         //Si la condition est vrai retourne sur la condition//
         return (
@@ -108,11 +108,10 @@ function deleteProduct() {
         evenement.target.closest(".cart__item").dataset.color;
       evenement.target.closest(".cart__item").remove();
       let collecting = await JSON.parse(localStorage.getItem("product"));
-      console.log(collecting);
       const searchDeletingProduct = collecting.findIndex((item) => {
         return item.id != deleteItem || item.color != deleteItemColor;
       });
-  
+
       //on ouvre la variable pour supprimer l'élément qu'on a ciblé//
       collecting.splice(searchDeletingProduct, 1);
       localStorage.setItem("product", JSON.stringify(collecting));
@@ -177,7 +176,7 @@ function valideOrder(firstName, lastName, adress, city, email) {
   } else {
     lastNameError.innerHTML = "";
   }
-  if (!adressReg.test(adress)  || adress === null) {
+  if (!adressReg.test(adress) || adress === null) {
     adressError.innerHTML = "Veuillez renseigner une adresse valide";
     formOk = false;
   } else {
@@ -192,7 +191,7 @@ function valideOrder(firstName, lastName, adress, city, email) {
   if (!emailReg.test(email) || email === null) {
     emailError.innerHTML = "Veuillez renseigner une adresse email valide";
     formOk = false;
-  } 
+  }
   else {
     emailError.innerHTML = "";
   }
@@ -206,31 +205,31 @@ function valideOrder(firstName, lastName, adress, city, email) {
       email: email,
     };
     alert("Formulaire OK");
-  
-  //Créer un tableau vide pour récupérer les produits du panier depuis le localStorage//
-  let idProduct = [];
-  //Methode POST pour ne prendre que l'ID des produits du localStorage
-  for (let kanapId of collectOrder) {
-    idProduct.push(kanapId.kanapId);
+
+    //Créer un tableau vide pour récupérer les produits du panier depuis le localStorage//
+    let idProduct = [];
+    //Methode POST pour ne prendre que l'ID des produits du localStorage
+    for (let kanapId of collectOrder) {
+      idProduct.push(kanapId.kanapId);
+    }
+    //Infos de la commande//
+    let finalOrder = { contact: contactDetails, products: idProduct };
+    //Récupère toute la commande avec fetch POST vers API//
+    const orderId = fetch("http://localhost:3000/api/products/order", {
+      method: "POST",
+      body: JSON.stringify(finalOrder),
+      headers: {
+        "content-type": "application/json",
+      },
+    });
+    //Réponse de l'API//
+    orderId.then(async (response) => {
+      responseFromApi = await response.json();
+      window.location.href = `confirmation.html?orderId=${responseFromApi.orderId}`;
+    });
   }
-  //Infos de la commande//
-  let finalOrder = { contact: contactDetails, products: idProduct };
-  //Récupère toute la commande avec fetch POST vers API//
-  const orderId = fetch("http://localhost:3000/api/products/order", {
-    method: "POST",
-    body: JSON.stringify(finalOrder),
-    headers: {
-      "content-type": "application/json",
-    },
-  });
-  //Réponse de l'API//
-  orderId.then(async (response) => {
-    responseFromApi = await response.json();
-    window.location.href = `confirmation.html?orderId=${responseFromApi.orderId}`;
-    console.log(responseFromApi.orderId);
-  });
 }
-}
+
 
 /*Appel des toutes les  fonctions pour l'affichage des produits stockés dans le localStorage*/
 async function main() {
